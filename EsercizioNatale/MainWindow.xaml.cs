@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,30 +25,58 @@ namespace EsercizioNatale
         {
             InitializeComponent();
         }
+        private const string file_name = "txtfile";
 
         private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            double a = double.Parse(txtnumero1.Text);
-            double b = double.Parse(txtnumero2.Text);
-            if(cmbCalcolo.SelectedIndex==0)
+
+           {
+            try
             {
-                double somma = a + b;
-                txtrisultato.Text = $"{somma}";
+                double a = double.Parse(txtnumero1.Text);
+                double b = double.Parse(txtnumero2.Text);
+                double risultato=0;
+                string operatore = "";
+                if (cmbCalcolo.SelectedIndex == 0)
+                {
+                    operatore = "somma";
+                    risultato = a + b;
+                    txtrisultato.Text = $"{ risultato}";
+                }
+                if (cmbCalcolo.SelectedIndex == 1)
+                {
+                    operatore = "sottrazione";
+                    risultato = a - b;
+                    txtrisultato.Text = $"{ risultato}";
+                }
+                if (cmbCalcolo.SelectedIndex == 2)
+                {
+                    operatore = "moltiplicazione";
+                    risultato = a * b;
+                    txtrisultato.Text = $"{ risultato}";
+                }
+                if (cmbCalcolo.SelectedIndex == 3)
+                {
+                    operatore = "divisione";
+                    risultato = a / b;
+                    if (b == 0)
+                    {
+                        MessageBox.Show("Non si può dividere un numero per 0");
+                        txtrisultato.Text = "impossibile";
+                    }
+                    else
+                    {
+                        txtrisultato.Text = $" {risultato}";
+                    }
+
+                }
+            using (StreamWriter t = new StreamWriter(file_name, true))
+            {
+                t.WriteLine($"{a}   {b}   {operatore}   {risultato}");
             }
-            if(cmbCalcolo.SelectedIndex==1)
+
+            } catch(FormatException)
             {
-                double sottrazione = a - b;
-                txtrisultato.Text = $"{sottrazione}";
-            }
-            if(cmbCalcolo.SelectedIndex==2)
-            {
-                double moltiplicazione = a * b;
-                txtrisultato.Text = $"{moltiplicazione}";
-            }
-            if(cmbCalcolo.SelectedIndex==3)
-            {
-                double divisione = a / b;
-                txtrisultato.Text = $"{divisione}";
+                MessageBox.Show("Inserire solo numeri");
             }
         }
     }
